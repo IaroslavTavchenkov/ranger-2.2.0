@@ -277,7 +277,6 @@
                 <module>ranger-atlas-plugin-shim</module>
                 <module>ranger-kms-plugin-shim</module>
                 <module>ranger-presto-plugin-shim</module>
-                <module>ranger-examples</module>
                 <module>ranger-tools</module>
                 <module>plugin-atlas</module>
                 <module>plugin-schema-registry</module>
@@ -292,15 +291,6 @@
                    ranger-elasticsearch-plugin-shim, make sure to update dependency in distro/pom.xml
                 -->
                 <module>distro</module>
-            </modules>
-        </profile>
-        <profile>
-            <id>ranger-examples</id>
-            <modules>
-                <module>agents-common</module>
-                <module>agents-cred</module>
-                <module>intg</module>
-                <module>ranger-examples</module>
             </modules>
         </profile>
         <profile>
@@ -572,7 +562,6 @@
                 <module>ranger-solr-plugin-shim</module>
                 <module>ranger-atlas-plugin-shim</module>
                 <module>ranger-kms-plugin-shim</module>
-                <module>ranger-examples</module>
                 <module>ranger-tools</module>
                 <module>plugin-atlas</module>
                 <module>plugin-schema-registry</module>
@@ -657,7 +646,6 @@
                 <module>ranger-atlas-plugin-shim</module>
                 <module>ranger-kms-plugin-shim</module>
                 <module>ranger-presto-plugin-shim</module>
-                <module>ranger-examples</module>
                 <module>ranger-tools</module>
                 <module>plugin-atlas</module>
                 <module>plugin-schema-registry</module>
