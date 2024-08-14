@@ -201,7 +201,7 @@
         <fasterxml.jackson.databind.version>2.11.3</fasterxml.jackson.databind.version>
         <kstruct.gethostname4j.version>0.0.2</kstruct.gethostname4j.version>
         <jna.version>5.2.0</jna.version>
-        <jna-platform.version>5.2.0</jna-platform.version>
+        <jna-platform.version>5.14.0</jna-platform.version>
         <!-- presto plugin deps -->
         <presto.airlift.version>0.192</presto.airlift.version>
         <presto.bval-jsr.version>2.0.0</presto.bval-jsr.version>
