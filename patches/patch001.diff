@@ -1,0 +1,23 @@
+diff --git a/hdfs-agent/src/main/java/org/apache/ranger/authorization/hadoop/RangerHdfsAuthorizer.java b/hdfs-agent/src/main/java/org/apache/ranger/authorization/hadoop/RangerHdfsAuthorizer.java
+index 2389899..92a23f9 100644
+--- a/hdfs-agent/src/main/java/org/apache/ranger/authorization/hadoop/RangerHdfsAuthorizer.java
++++ b/hdfs-agent/src/main/java/org/apache/ranger/authorization/hadoop/RangerHdfsAuthorizer.java
+@@ -225,18 +225,6 @@ public class RangerHdfsAuthorizer extends INodeAttributeProvider {
+ 			}
+ 		}
+ 
+-		@Override
+-		public void checkPermissionWithContext(AuthorizationContext authzContext) throws AccessControlException {
+-			checkRangerPermission(authzContext.getFsOwner(), authzContext.getSupergroup(),
+-					authzContext.getCallerUgi(), authzContext.getInodeAttrs(),
+-					authzContext.getInodes(), authzContext.getPathByNameArr(),
+-					authzContext.getSnapshotId(), authzContext.getPath(),
+-					authzContext.getAncestorIndex(), authzContext.isDoCheckOwner(),
+-					authzContext.getAncestorAccess(), authzContext.getParentAccess(),
+-					authzContext.getAccess(), authzContext.getSubAccess(),
+-					authzContext.isIgnoreEmptyDir(), authzContext.getOperationName(),
+-					authzContext.getCallerContext());
+-		}
+ 
+ 		@Override
+ 		public void checkPermission(String fsOwner, String superGroup, UserGroupInformation ugi,

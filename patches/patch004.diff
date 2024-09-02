@@ -1,0 +1,13 @@
+diff --git a/distro/src/main/assembly/plugin-yarn.xml b/distro/src/main/assembly/plugin-yarn.xml
+index 14444f9..3f092d5 100644
+--- a/distro/src/main/assembly/plugin-yarn.xml
++++ b/distro/src/main/assembly/plugin-yarn.xml
+@@ -99,6 +99,7 @@
+           <include>commons-logging:commons-logging:jar:${commons.logging.version}</include>
+           <include>com.google.guava:guava:jar:${google.guava.version}</include>
+           <include>org.slf4j:slf4j-api:jar:${slf4j-api.version}</include>
++          <include>org.apache.htrace:htrace-core4:jar:${htrace-core.version}</include>
+           <include>org.apache.hadoop:hadoop-common:jar:${hadoop.version}</include>
+           <include>org.apache.hadoop:hadoop-auth:jar:${hadoop.version}</include>
+           <include>org.apache.ranger:ranger-plugins-cred</include>
+

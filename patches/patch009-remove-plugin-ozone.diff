@@ -1,0 +1,1719 @@
+diff --git a/plugin-ozone/.gitignore b/plugin-ozone/.gitignore
+deleted file mode 100644
+index b83d22266..000000000
+--- a/plugin-ozone/.gitignore
++++ /dev/null
+@@ -1 +0,0 @@
+-/target/
+diff --git a/plugin-ozone/conf/ozone-ranger-env.sh b/plugin-ozone/conf/ozone-ranger-env.sh
+deleted file mode 100755
+index 8234aa012..000000000
+--- a/plugin-ozone/conf/ozone-ranger-env.sh
++++ /dev/null
+@@ -1,33 +0,0 @@
+-#!/bin/bash
+-
+-# Licensed to the Apache Software Foundation (ASF) under one or more
+-# contributor license agreements.  See the NOTICE file distributed with
+-# this work for additional information regarding copyright ownership.
+-# The ASF licenses this file to You under the Apache License, Version 2.0
+-# (the "License"); you may not use this file except in compliance with
+-# the License.  You may obtain a copy of the License at
+-#
+-#     http://www.apache.org/licenses/LICENSE-2.0
+-#
+-# Unless required by applicable law or agreed to in writing, software
+-# distributed under the License is distributed on an "AS IS" BASIS,
+-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+-# See the License for the specific language governing permissions and
+-# limitations under the License.
+-
+-classpathmunge () {
+-        escaped=`echo $1 | sed -e 's:\*:\\\\*:g'`
+-        if ! echo ${CLASSPATH} | /bin/egrep -q "(^|:)${escaped}($|:)" ; then
+-           if [ "$2" = "before" ] ; then
+-              CLASSPATH=$1:${CLASSPATH}
+-           else
+-              CLASSPATH=${CLASSPATH}:$1
+-           fi
+-        fi
+-}
+-classpathmunge /etc/ozone/conf
+-classpathmunge '/usr/hdp/current/hadoop-hdfs-client/*'
+-classpathmunge '/usr/hdp/current/hadoop-hdfs-client/lib/*'
+-classpathmunge '/etc/hadoop/conf'
+-export CLASSPATH
+-unset classpathmunge
+diff --git a/plugin-ozone/conf/ranger-ozone-audit-changes.cfg b/plugin-ozone/conf/ranger-ozone-audit-changes.cfg
+deleted file mode 100644
+index 8cd5e39c8..000000000
+--- a/plugin-ozone/conf/ranger-ozone-audit-changes.cfg
++++ /dev/null
+@@ -1,68 +0,0 @@
+-# Licensed to the Apache Software Foundation (ASF) under one or more
+-# contributor license agreements.  See the NOTICE file distributed with
+-# this work for additional information regarding copyright ownership.
+-# The ASF licenses this file to You under the Apache License, Version 2.0
+-# (the "License"); you may not use this file except in compliance with
+-# the License.  You may obtain a copy of the License at
+-#
+-#     http://www.apache.org/licenses/LICENSE-2.0
+-#
+-# Unless required by applicable law or agreed to in writing, software
+-# distributed under the License is distributed on an "AS IS" BASIS,
+-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+-# See the License for the specific language governing permissions and
+-# limitations under the License.
+-
+-xasecure.audit.hdfs.is.enabled                                     %XAAUDIT.HDFS.IS_ENABLED%                               mod create-if-not-exists
+-xasecure.audit.hdfs.config.destination.directory                   %XAAUDIT.HDFS.DESTINATION_DIRECTORY%                    mod create-if-not-exists
+-xasecure.audit.hdfs.config.destination.file                        %XAAUDIT.HDFS.DESTINTATION_FILE%                        mod create-if-not-exists
+-xasecure.audit.hdfs.config.destination.flush.interval.seconds      %XAAUDIT.HDFS.DESTINTATION_FLUSH_INTERVAL_SECONDS%      mod create-if-not-exists
+-xasecure.audit.hdfs.config.destination.rollover.interval.seconds   %XAAUDIT.HDFS.DESTINTATION_ROLLOVER_INTERVAL_SECONDS%   mod create-if-not-exists
+-xasecure.audit.hdfs.config.destination.open.retry.interval.seconds %XAAUDIT.HDFS.DESTINTATION_OPEN_RETRY_INTERVAL_SECONDS% mod create-if-not-exists
+-xasecure.audit.hdfs.config.local.buffer.directory                  %XAAUDIT.HDFS.LOCAL_BUFFER_DIRECTORY%                   mod create-if-not-exists
+-xasecure.audit.hdfs.config.local.buffer.file                       %XAAUDIT.HDFS.LOCAL_BUFFER_FILE%                        mod create-if-not-exists
+-xasecure.audit.hdfs.config.local.buffer.flush.interval.seconds     %XAAUDIT.HDFS.LOCAL_BUFFER_FLUSH_INTERVAL_SECONDS%      mod create-if-not-exists
+-xasecure.audit.hdfs.config.local.buffer.rollover.interval.seconds  %XAAUDIT.HDFS.LOCAL_BUFFER_ROLLOVER_INTERVAL_SECONDS%   mod create-if-not-exists
+-xasecure.audit.hdfs.config.local.archive.directory                 %XAAUDIT.HDFS.LOCAL_ARCHIVE_DIRECTORY%                  mod create-if-not-exists
+-xasecure.audit.hdfs.config.local.archive.max.file.count            %XAAUDIT.HDFS.LOCAL_ARCHIVE_MAX_FILE_COUNT%             mod create-if-not-exists
+-
+-xasecure.audit.solr.is.enabled                                    %XAAUDIT.SOLR.IS_ENABLED%                               mod create-if-not-exists
+-xasecure.audit.solr.solr_url                                      %XAAUDIT.SOLR.SOLR_URL%                                 mod create-if-not-exists
+-
+-#V3 configuration
+-xasecure.audit.provider.summary.enabled				  %XAAUDIT.SUMMARY.ENABLE%				mod create-if-not-exists
+-
+-xasecure.audit.destination.solr                                    %XAAUDIT.SOLR.ENABLE%                               mod create-if-not-exists
+-xasecure.audit.destination.solr.urls                               %XAAUDIT.SOLR.URL%                                 mod create-if-not-exists
+-xasecure.audit.destination.solr.user %XAAUDIT.SOLR.USER% mod create-if-not-exists
+-xasecure.audit.destination.solr.password %XAAUDIT.SOLR.PASSWORD% mod create-if-not-exists
+-xasecure.audit.destination.solr.zookeepers                         %XAAUDIT.SOLR.ZOOKEEPER%                           mod create-if-not-exists
+-xasecure.audit.destination.solr.batch.filespool.dir                %XAAUDIT.SOLR.FILE_SPOOL_DIR%                      mod create-if-not-exists
+-
+-xasecure.audit.destination.elasticsearch                                    %XAAUDIT.ELASTICSEARCH.ENABLE%                              mod create-if-not-exists
+-xasecure.audit.destination.elasticsearch.urls                               %XAAUDIT.ELASTICSEARCH.URL%                                 mod create-if-not-exists
+-xasecure.audit.destination.elasticsearch.user 							   %XAAUDIT.ELASTICSEARCH.USER% 								  mod create-if-not-exists
+-xasecure.audit.destination.elasticsearch.password 						   %XAAUDIT.ELASTICSEARCH.PASSWORD% 							  mod create-if-not-exists
+-xasecure.audit.destination.elasticsearch.index 						   %XAAUDIT.ELASTICSEARCH.INDEX% 							  mod create-if-not-exists
+-xasecure.audit.destination.elasticsearch.port 						   %XAAUDIT.ELASTICSEARCH.PORT% 							  mod create-if-not-exists
+-xasecure.audit.destination.elasticsearch.protocol 						   %XAAUDIT.ELASTICSEARCH.PROTOCOL% 							  mod create-if-not-exists
+-
+-xasecure.audit.destination.hdfs					   %XAAUDIT.HDFS.ENABLE%                      mod create-if-not-exists
+-xasecure.audit.destination.hdfs.batch.filespool.dir                %XAAUDIT.HDFS.FILE_SPOOL_DIR%                      mod create-if-not-exists
+-xasecure.audit.destination.hdfs.dir             		   %XAAUDIT.HDFS.HDFS_DIR%                      mod create-if-not-exists
+-
+-AZURE.ACCOUNTNAME                                                                                                 %XAAUDIT.HDFS.AZURE_ACCOUNTNAME%            var
+-xasecure.audit.destination.hdfs.config.fs.azure.shellkeyprovider.script                                           %XAAUDIT.HDFS.AZURE_SHELL_KEY_PROVIDER%     mod         create-if-not-exists
+-xasecure.audit.destination.hdfs.config.fs.azure.account.key.%AZURE.ACCOUNTNAME%.blob.core.windows.net             %XAAUDIT.HDFS.AZURE_ACCOUNTKEY%             mod         create-if-not-exists
+-xasecure.audit.destination.hdfs.config.fs.azure.account.keyprovider.%AZURE.ACCOUNTNAME%.blob.core.windows.net     %XAAUDIT.HDFS.AZURE_ACCOUNTKEY_PROVIDER%    mod         create-if-not-exists
+-
+-#xasecure.audit.destination.file					   %XAAUDIT.FILE.ENABLE%                      mod create-if-not-exists
+-#xasecure.audit.destination.file.dir               		   %XAAUDIT.FILE.DIR%                      mod create-if-not-exists
+-
+-#log4j configuration
+-xasecure.audit.log4j.is.enabled                %XAAUDIT.LOG4J.ENABLE%                      mod create-if-not-exists
+-xasecure.audit.log4j.is.async                %XAAUDIT.LOG4J.IS_ASYNC%                      mod create-if-not-exists
+-xasecure.audit.log4j.async.max.queue.size                %XAAUDIT.LOG4J.ASYNC.MAX.QUEUE.SIZE%                      mod create-if-not-exists
+-xasecure.audit.log4j.async.max.flush.interval.ms                %XAAUDIT.LOG4J.ASYNC.MAX.FLUSH.INTERVAL.MS%                      mod create-if-not-exists
+-xasecure.audit.destination.log4j                %XAAUDIT.LOG4J.DESTINATION.LOG4J%                      mod create-if-not-exists
+-xasecure.audit.destination.log4j.logger                %XAAUDIT.LOG4J.DESTINATION.LOG4J.LOGGER%                      mod create-if-not-exists
+diff --git a/plugin-ozone/conf/ranger-ozone-audit.xml b/plugin-ozone/conf/ranger-ozone-audit.xml
+deleted file mode 100644
+index d9dede5be..000000000
+--- a/plugin-ozone/conf/ranger-ozone-audit.xml
++++ /dev/null
+@@ -1,207 +0,0 @@
+-<?xml version="1.0"?>
+-<!--
+-  Licensed to the Apache Software Foundation (ASF) under one or more
+-  contributor license agreements.  See the NOTICE file distributed with
+-  this work for additional information regarding copyright ownership.
+-  The ASF licenses this file to You under the Apache License, Version 2.0
+-  (the "License"); you may not use this file except in compliance with
+-  the License.  You may obtain a copy of the License at
+-
+-      http://www.apache.org/licenses/LICENSE-2.0
+-
+-  Unless required by applicable law or agreed to in writing, software
+-  distributed under the License is distributed on an "AS IS" BASIS,
+-  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+-  See the License for the specific language governing permissions and
+-  limitations under the License.
+--->
+-<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+-<configuration xmlns:xi="http://www.w3.org/2001/XInclude">
+-	<property>
+-		<name>xasecure.audit.is.enabled</name>
+-		<value>true</value>
+-	</property>
+-
+-	<!-- HDFS audit provider configuration -->
+-	<property>
+-		<name>xasecure.audit.hdfs.is.enabled</name>
+-		<value>false</value>
+-	</property>
+-
+-	<property>
+-		<name>xasecure.audit.hdfs.is.async</name>
+-		<value>true</value>
+-	</property>
+-	<property>
+-		<name>xasecure.audit.hdfs.async.max.queue.size</name>
+-		<value>1048576</value>
+-	</property>
+-
+-	<property>
+-		<name>xasecure.audit.hdfs.async.max.flush.interval.ms</name>
+-		<value>30000</value>
+-	</property>
+-
+-	<property>
+-		<name>xasecure.audit.hdfs.config.encoding</name>
+-		<value></value>
+-	</property>
+-
+-	<property>
+-		<name>xasecure.audit.hdfs.config.destination.directory</name>
+-		<value>hdfs://NAMENODE_HOST:8020/ranger/audit/%app-type%/%time:yyyyMMdd%</value>
+-	</property>
+-
+-	<property>
+-		<name>xasecure.audit.hdfs.config.destination.file</name>
+-		<value>%hostname%-audit.log</value>
+-	</property>
+-
+-	<property>
+-		<name>xasecure.audit.hdfs.config.destination.flush.interval.seconds</name>
+-		<value>900</value>
+-	</property>
+-
+-	<property>
+-		<name>xasecure.audit.hdfs.config.destination.rollover.interval.seconds</name>
+-		<value>86400</value>
+-	</property>
+-
+-	<property>
+-		<name>xasecure.audit.hdfs.config.destination.open.retry.interval.seconds</name>
+-		<value>60</value>
+-	</property>
+-
+-	<property>
+-		<name>xasecure.audit.hdfs.config.local.buffer.directory</name>
+-		<value>/var/log/ozone/audit</value>
+-	</property>
+-
+-	<property>
+-		<name>xasecure.audit.hdfs.config.local.buffer.file</name>
+-		<value>%time:yyyyMMdd-HHmm.ss%.log</value>
+-	</property>
+-
+-	<property>
+-		<name>xasecure.audit.hdfs.config.local.buffer.file.buffer.size.bytes</name>
+-		<value>8192</value>
+-	</property>
+-
+-	<property>
+-		<name>xasecure.audit.hdfs.config.local.buffer.flush.interval.seconds</name>
+-		<value>60</value>
+-	</property>
+-
+-	<property>
+-		<name>xasecure.audit.hdfs.config.local.buffer.rollover.interval.seconds</name>
+-		<value>600</value>
+-	</property>
+-
+-	<property>
+-		<name>xasecure.audit.hdfs.config.local.archive.directory</name>
+-		<value>/var/log/ozone/audit/archive</value>
+-	</property>
+-
+-	<property>
+-		<name>xasecure.audit.hdfs.config.local.archive.max.file.count</name>
+-		<value>10</value>
+-	</property>
+-	<!-- Audit to HDFS on Azure Datastore (WASB) requires v3 style settings.  Comment the above and uncomment only the
+-	following to audit to Azure Blob Datastore via hdfs' WASB schema.
+-
+-	NOTE: If you specify one audit destination in v3 style then other destinations, if any, must also be specified in v3 style
+-	====
+-
+-	<property>
+-		<name>xasecure.audit.destination.hdfs</name>
+-		<value>enabled</value>
+-	</property>
+-
+-	<property>
+-		<name>xasecure.audit.destination.hdfs.dir</name>
+-		<value>wasb://ranger-audit1@youraccount.blob.core.windows.net</value>
+-	</property>
+-
+-	the following 3 correspond to the properties with similar name in core-site.xml, i.e.
+-	- fs.azure.account.key.youraccount.blob.core.windows.net => xasecure.audit.destination.hdfs.config.fs.azure.account.key.youraccount.blob.core.windows.net and
+-	- fs.azure.account.keyprovider.youraccount.blob.core.windows.net => xasecure.audit.destination.hdfs.config.fs.azure.account.keyprovider.youraccount.blob.core.windows.net,
+-	- fs.azure.shellkeyprovider.script => xasecure.audit.destination.hdfs.config.fs.azure.shellkeyprovider.script,
+-
+-	<property>
+-		<name>xasecure.audit.destination.hdfs.config.fs.azure.account.key.youraccount.blob.core.windows.net</name>
+-		<value>YOUR ENCRYPTED ACCESS KEY</value>
+-	</property>
+-
+-	<property>
+-		<name>xasecure.audit.destination.hdfs.config.fs.azure.account.keyprovider.youraccount.blob.core.windows.net</name>
+-		<value>org.apache.hadoop.fs.azure.ShellDecryptionKeyProvider</value>
+-	</property>
+-
+-	<property>
+-		<name>xasecure.audit.destination.hdfs.config.fs.azure.shellkeyprovider.script</name>
+-		<value>/usr/lib/python2.7/dist-packages/hdinsight_common/decrypt.sh</value>
+-	</property>
+-	-->
+-
+-	<!-- Log4j audit provider configuration -->
+-	<property>
+-		<name>xasecure.audit.log4j.is.enabled</name>
+-		<value>false</value>
+-	</property>
+-
+-	<property>
+-		<name>xasecure.audit.log4j.is.async</name>
+-		<value>false</value>
+-	</property>
+-	<property>
+-		<name>xasecure.audit.log4j.async.max.queue.size</name>
+-		<value>10240</value>
+-	</property>
+-
+-	<property>
+-		<name>xasecure.audit.log4j.async.max.flush.interval.ms</name>
+-		<value>30000</value>
+-	</property>
+-	<!-- Ozone audit provider configuration -->
+-	<property>
+-		<name>xasecure.audit.ozone.is.enabled</name>
+-		<value>false</value>
+-	</property>
+-
+-	<property>
+-		<name>xasecure.audit.ozone.async.max.queue.size</name>
+-		<value>1</value>
+-	</property>
+-
+-	<property>
+-		<name>xasecure.audit.ozone.async.max.flush.interval.ms</name>
+-		<value>1000</value>
+-	</property>
+-	<property>
+-		<name>xasecure.audit.ozone.broker_list</name>
+-		<value>localhost:9092</value>
+-	</property>
+-
+-	<property>
+-		<name>xasecure.audit.ozone.topic_name</name>
+-		<value>ranger_audits</value>
+-	</property>
+-	<!-- Ranger audit provider configuration -->
+-	<property>
+-		<name>xasecure.audit.solr.is.enabled</name>
+-		<value>false</value>
+-	</property>
+-	<property>
+-		<name>xasecure.audit.solr.async.max.queue.size</name>
+-		<value>1</value>
+-	</property>
+-
+-	<property>
+-		<name>xasecure.audit.solr.async.max.flush.interval.ms</name>
+-		<value>1000</value>
+-	</property>
+-	<property>
+-		<name>xasecure.audit.solr.solr_url</name>
+-		<value>http://localhost:6083/solr/ranger_audits</value>
+-	</property>
+-</configuration>
+diff --git a/plugin-ozone/conf/ranger-ozone-security-changes.cfg b/plugin-ozone/conf/ranger-ozone-security-changes.cfg
+deleted file mode 100644
+index 30eae3ec9..000000000
+--- a/plugin-ozone/conf/ranger-ozone-security-changes.cfg
++++ /dev/null
+@@ -1,28 +0,0 @@
+-# Licensed to the Apache Software Foundation (ASF) under one or more
+-# contributor license agreements.  See the NOTICE file distributed with
+-# this work for additional information regarding copyright ownership.
+-# The ASF licenses this file to You under the Apache License, Version 2.0
+-# (the "License"); you may not use this file except in compliance with
+-# the License.  You may obtain a copy of the License at
+-#
+-#     http://www.apache.org/licenses/LICENSE-2.0
+-#
+-# Unless required by applicable law or agreed to in writing, software
+-# distributed under the License is distributed on an "AS IS" BASIS,
+-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+-# See the License for the specific language governing permissions and
+-# limitations under the License.
+-#
+-# Change the original policy parameter to work with policy manager based.
+-#
+-#
+-ranger.plugin.ozone.service.name %REPOSITORY_NAME% mod create-if-not-exists
+-
+-ranger.plugin.ozone.policy.source.impl org.apache.ranger.admin.client.RangerAdminRESTClient mod create-if-not-exists
+-
+-ranger.plugin.ozone.policy.rest.url                %POLICY_MGR_URL%                          mod create-if-not-exists
+-ranger.plugin.ozone.policy.rest.ssl.config.file    %COMPONENT_INSTALL_DIR_NAME%/conf/ranger-policymgr-ssl.xml  mod create-if-not-exists
+-ranger.plugin.ozone.policy.pollIntervalMs          30000                                     mod create-if-not-exists
+-ranger.plugin.ozone.policy.cache.dir               %POLICY_CACHE_FILE_PATH%                  mod create-if-not-exists
+-ranger.policy.rest.client.connection.timeoutMs	   120000									 mod create-if-not-exists
+-ranger.policy.rest.client.read.timeoutMs		   30000									 mod create-if-not-exists
+\ No newline at end of file
+diff --git a/plugin-ozone/conf/ranger-ozone-security.xml b/plugin-ozone/conf/ranger-ozone-security.xml
+deleted file mode 100644
+index 40ebdb68c..000000000
+--- a/plugin-ozone/conf/ranger-ozone-security.xml
++++ /dev/null
+@@ -1,83 +0,0 @@
+-<?xml version="1.0"?>
+-<!--
+-  Licensed to the Apache Software Foundation (ASF) under one or more
+-  contributor license agreements.  See the NOTICE file distributed with
+-  this work for additional information regarding copyright ownership.
+-  The ASF licenses this file to You under the Apache License, Version 2.0
+-  (the "License"); you may not use this file except in compliance with
+-  the License.  You may obtain a copy of the License at
+-
+-      http://www.apache.org/licenses/LICENSE-2.0
+-
+-  Unless required by applicable law or agreed to in writing, software
+-  distributed under the License is distributed on an "AS IS" BASIS,
+-  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+-  See the License for the specific language governing permissions and
+-  limitations under the License.
+--->
+-<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+-<configuration xmlns:xi="http://www.w3.org/2001/XInclude">
+-	<property>
+-		<name>ranger.plugin.ozone.service.name</name>
+-		<value>ozonedev</value>
+-		<description>
+-			Name of the Ranger service containing policies for this Ozone instance
+-		</description>
+-	</property>
+-
+-	<property>
+-		<name>ranger.plugin.ozone.policy.source.impl</name>
+-		<value>org.apache.ranger.admin.client.RangerAdminRESTClient</value>
+-		<description>
+-			Class to retrieve policies from the source
+-		</description>
+-	</property>
+-
+-	<property>
+-		<name>ranger.plugin.ozone.policy.rest.url</name>
+-		<value>http://policymanagerhost:port</value>
+-		<description>
+-			URL to Ranger Admin
+-		</description>
+-	</property>
+-
+-	<property>
+-		<name>ranger.plugin.ozone.policy.rest.ssl.config.file</name>
+-		<value>/etc/ozone/conf/ranger-policymgr-ssl.xml</value>
+-		<description>
+-			Path to the file containing SSL details to contact Ranger Admin
+-		</description>
+-	</property>
+-
+-	<property>
+-		<name>ranger.plugin.ozone.policy.pollIntervalMs</name>
+-		<value>30000</value>
+-		<description>
+-			How often to poll for changes in policies?
+-		</description>
+-	</property>
+-
+-	<property>
+-		<name>ranger.plugin.ozone.policy.cache.dir</name>
+-		<value>/etc/ranger/ozonedev/policycache</value>
+-		<description>
+-			Directory where Ranger policies are cached after successful retrieval from the source
+-		</description>
+-	</property>
+-
+-	<property>
+-		<name>ranger.plugin.ozone.policy.rest.client.connection.timeoutMs</name>
+-		<value>120000</value>
+-		<description>
+-			RangerRestClient Connection Timeout in Milli Seconds
+-		</description>
+-	</property>
+-
+-	<property>
+-		<name>ranger.plugin.ozone.policy.rest.client.read.timeoutMs</name>
+-		<value>30000</value>
+-		<description>
+-			RangerRestClient read Timeout in Milli Seconds
+-		</description>
+-	</property>
+-</configuration>
+diff --git a/plugin-ozone/conf/ranger-policymgr-ssl-changes.cfg b/plugin-ozone/conf/ranger-policymgr-ssl-changes.cfg
+deleted file mode 100644
+index ae347e845..000000000
+--- a/plugin-ozone/conf/ranger-policymgr-ssl-changes.cfg
++++ /dev/null
+@@ -1,21 +0,0 @@
+-# Licensed to the Apache Software Foundation (ASF) under one or more
+-# contributor license agreements.  See the NOTICE file distributed with
+-# this work for additional information regarding copyright ownership.
+-# The ASF licenses this file to You under the Apache License, Version 2.0
+-# (the "License"); you may not use this file except in compliance with
+-# the License.  You may obtain a copy of the License at
+-#
+-#     http://www.apache.org/licenses/LICENSE-2.0
+-#
+-# Unless required by applicable law or agreed to in writing, software
+-# distributed under the License is distributed on an "AS IS" BASIS,
+-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+-# See the License for the specific language governing permissions and
+-# limitations under the License.
+-#
+-# SSL Params
+-#
+-xasecure.policymgr.clientssl.keystore					 %SSL_KEYSTORE_FILE_PATH%						mod create-if-not-exists
+-xasecure.policymgr.clientssl.keystore.credential.file	 jceks://file%CREDENTIAL_PROVIDER_FILE%			mod create-if-not-exists
+-xasecure.policymgr.clientssl.truststore				     %SSL_TRUSTSTORE_FILE_PATH%						mod create-if-not-exists
+-xasecure.policymgr.clientssl.truststore.credential.file  jceks://file%CREDENTIAL_PROVIDER_FILE%         mod create-if-not-exists
+diff --git a/plugin-ozone/conf/ranger-policymgr-ssl.xml b/plugin-ozone/conf/ranger-policymgr-ssl.xml
+deleted file mode 100644
+index c01e77fd2..000000000
+--- a/plugin-ozone/conf/ranger-policymgr-ssl.xml
++++ /dev/null
+@@ -1,49 +0,0 @@
+-<?xml version="1.0"?>
+-<!--
+-  Licensed to the Apache Software Foundation (ASF) under one or more
+-  contributor license agreements.  See the NOTICE file distributed with
+-  this work for additional information regarding copyright ownership.
+-  The ASF licenses this file to You under the Apache License, Version 2.0
+-  (the "License"); you may not use this file except in compliance with
+-  the License.  You may obtain a copy of the License at
+-
+-      http://www.apache.org/licenses/LICENSE-2.0
+-
+-  Unless required by applicable law or agreed to in writing, software
+-  distributed under the License is distributed on an "AS IS" BASIS,
+-  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+-  See the License for the specific language governing permissions and
+-  limitations under the License.
+--->
+-<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+-<configuration xmlns:xi="http://www.w3.org/2001/XInclude">
+-	<!--  The following properties are used for 2-way SSL client server validation -->
+-	<property>
+-		<name>xasecure.policymgr.clientssl.keystore</name>
+-		<value>ozonedev-clientcert.jks</value>
+-		<description>
+-			Java Keystore files
+-		</description>
+-	</property>
+-	<property>
+-		<name>xasecure.policymgr.clientssl.truststore</name>
+-		<value>cacerts-xasecure.jks</value>
+-		<description>
+-			java truststore file
+-		</description>
+-	</property>
+-    <property>
+-		<name>xasecure.policymgr.clientssl.keystore.credential.file</name>
+-		<value>jceks://file/tmp/keystore-ozonedev-ssl.jceks</value>
+-		<description>
+-			java  keystore credential file
+-		</description>
+-	</property>
+-	<property>
+-		<name>xasecure.policymgr.clientssl.truststore.credential.file</name>
+-		<value>jceks://file/tmp/truststore-ozonedev-ssl.jceks</value>
+-		<description>
+-			java  truststore credential file
+-		</description>
+-	</property>
+-</configuration>
+diff --git a/plugin-ozone/pom.xml b/plugin-ozone/pom.xml
+deleted file mode 100644
+index d0da284f4..000000000
+--- a/plugin-ozone/pom.xml
++++ /dev/null
+@@ -1,89 +0,0 @@
+-<?xml version="1.0" encoding="UTF-8"?>
+-<!--
+-Licensed to the Apache Software Foundation (ASF) under one or more
+-contributor license agreements.  See the NOTICE file distributed with
+-this work for additional information regarding copyright ownership.
+-The ASF licenses this file to You under the Apache License, Version 2.0
+-(the "License"); you may not use this file except in compliance with
+-the License.  You may obtain a copy of the License at
+-
+-http://www.apache.org/licenses/LICENSE-2.0
+-
+-Unless required by applicable law or agreed to in writing, software
+-distributed under the License is distributed on an "AS IS" BASIS,
+-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+-See the License for the specific language governing permissions and
+-limitations under the License.
+--->
+-
+-<project xmlns="http://maven.apache.org/POM/4.0.0"
+-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+-    <modelVersion>4.0.0</modelVersion>
+-    <artifactId>ranger-ozone-plugin</artifactId>
+-    <name>Ozone Security Plugin</name>
+-    <description>Ozone Security Plugin</description>
+-    <packaging>jar</packaging>
+-    <properties>
+-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+-    </properties>
+-    <parent>
+-        <artifactId>ranger</artifactId>
+-        <groupId>org.apache.ranger</groupId>
+-        <version>2.2.0</version>
+-        <relativePath>..</relativePath>
+-    </parent>
+-    <dependencies>
+-        <dependency>
+-            <groupId>org.apache.ranger</groupId>
+-            <artifactId>ranger-plugins-common</artifactId>
+-            <version>${project.version}</version>
+-	    <exclusions>
+-                <exclusion>
+-                    <groupId>org.codehaus.jackson</groupId>
+-                    <artifactId>jackson-mapper-asl</artifactId>
+-                </exclusion>
+-            </exclusions>
+-        </dependency>
+-        <dependency>
+-            <groupId>org.apache.ranger</groupId>
+-            <artifactId>ranger-plugins-audit</artifactId>
+-            <version>${project.version}</version>
+-        </dependency>
+-        <dependency>
+-            <groupId>org.apache.ranger</groupId>
+-            <artifactId>credentialbuilder</artifactId>
+-            <version>${project.version}</version>
+-        </dependency>
+-        <dependency>
+-            <groupId>org.apache.hadoop</groupId>
+-            <artifactId>hadoop-hdfs</artifactId>
+-            <version>${hadoop.version}</version>
+-        </dependency>
+-        <dependency>
+-            <groupId>org.apache.httpcomponents</groupId>
+-            <artifactId>httpcore</artifactId>
+-            <version>${httpcomponents.httpcore.version}</version>
+-        </dependency>
+-        <dependency>
+-            <groupId>org.apache.hadoop</groupId>
+-            <artifactId>hadoop-ozone-common</artifactId>
+-	        <version>${ozone.version}</version>
+-        </dependency>
+-        <dependency>
+-            <groupId>org.apache.hadoop</groupId>
+-            <artifactId>hadoop-hdds-common</artifactId>
+-	        <version>${ozone.version}</version>
+-        </dependency>
+-        <dependency>
+-            <groupId>org.apache.hadoop</groupId>
+-            <artifactId>hadoop-ozone-client</artifactId>
+-	        <version>${ozone.version}</version>
+-        </dependency>
+-	<dependency>
+-            <groupId>org.codehaus.jackson</groupId>
+-            <artifactId>jackson-mapper-asl</artifactId>
+-            <version>${codehaus.jackson.version}</version>
+-        </dependency>
+-    </dependencies>
+-</project>
+diff --git a/plugin-ozone/scripts/install.properties b/plugin-ozone/scripts/install.properties
+deleted file mode 100644
+index a160ec155..000000000
+--- a/plugin-ozone/scripts/install.properties
++++ /dev/null
+@@ -1,165 +0,0 @@
+-# Licensed to the Apache Software Foundation (ASF) under one or more
+-# contributor license agreements.  See the NOTICE file distributed with
+-# this work for additional information regarding copyright ownership.
+-# The ASF licenses this file to You under the Apache License, Version 2.0
+-# (the "License"); you may not use this file except in compliance with
+-# the License.  You may obtain a copy of the License at
+-#
+-#     http://www.apache.org/licenses/LICENSE-2.0
+-#
+-# Unless required by applicable law or agreed to in writing, software
+-# distributed under the License is distributed on an "AS IS" BASIS,
+-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+-# See the License for the specific language governing permissions and
+-# limitations under the License.
+-
+-# Location of component folder
+-COMPONENT_INSTALL_DIR_NAME=../ozone
+-
+-#
+-# Location of Policy Manager URL
+-#
+-# Example:
+-# POLICY_MGR_URL=http://policymanager.xasecure.net:6080
+-#
+-POLICY_MGR_URL=
+-
+-#
+-# This is the repository name created within policy manager
+-#
+-# Example:
+-# REPOSITORY_NAME=ozonedev
+-#
+-REPOSITORY_NAME=
+-
+-# AUDIT configuration with V3 properties
+-
+-#Should audit be summarized at source
+-XAAUDIT.SUMMARY.ENABLE=true
+-
+-# Enable audit logs to Solr
+-#Example
+-#XAAUDIT.SOLR.ENABLE=true
+-#XAAUDIT.SOLR.URL=http://localhost:6083/solr/ranger_audits
+-#XAAUDIT.SOLR.ZOOKEEPER=
+-#XAAUDIT.SOLR.FILE_SPOOL_DIR=/var/log/ozone/audit/solr/spool
+-
+-XAAUDIT.SOLR.ENABLE=false
+-XAAUDIT.SOLR.URL=NONE
+-XAAUDIT.SOLR.USER=NONE
+-XAAUDIT.SOLR.PASSWORD=NONE
+-XAAUDIT.SOLR.ZOOKEEPER=NONE
+-XAAUDIT.SOLR.FILE_SPOOL_DIR=/var/log/ozone/audit/solr/spool
+-
+-# Enable audit logs to ElasticSearch
+-#Example
+-#XAAUDIT.ELASTICSEARCH.ENABLE=true
+-#XAAUDIT.ELASTICSEARCH.URL=localhost
+-#XAAUDIT.ELASTICSEARCH.INDEX=audit
+-
+-XAAUDIT.ELASTICSEARCH.ENABLE=false
+-XAAUDIT.ELASTICSEARCH.URL=NONE
+-XAAUDIT.ELASTICSEARCH.USER=NONE
+-XAAUDIT.ELASTICSEARCH.PASSWORD=NONE
+-XAAUDIT.ELASTICSEARCH.INDEX=NONE
+-XAAUDIT.ELASTICSEARCH.PORT=NONE
+-XAAUDIT.ELASTICSEARCH.PROTOCOL=NONE
+-
+-# Enable audit logs to HDFS
+-#Example
+-#XAAUDIT.HDFS.ENABLE=true
+-#XAAUDIT.HDFS.HDFS_DIR=hdfs://node-1.example.com:8020/ranger/audit
+-#  If using Azure Blob Storage
+-#XAAUDIT.HDFS.HDFS_DIR=wasb[s]://<containername>@<accountname>.blob.core.windows.net/<path>
+-#XAAUDIT.HDFS.HDFS_DIR=wasb://ranger_audit_container@my-azure-account.blob.core.windows.net/ranger/audit
+-#XAAUDIT.HDFS.FILE_SPOOL_DIR=/var/log/ozone/audit/hdfs/spool
+-
+-XAAUDIT.HDFS.ENABLE=false
+-XAAUDIT.HDFS.HDFS_DIR=hdfs://__REPLACE__NAME_NODE_HOST:8020/ranger/audit
+-XAAUDIT.HDFS.FILE_SPOOL_DIR=/var/log/ozone/audit/hdfs/spool
+-
+-# Following additional propertis are needed When auditing to Azure Blob Storage via HDFS
+-# Get these values from your /etc/hadoop/conf/core-site.xml
+-#XAAUDIT.HDFS.HDFS_DIR=wasb[s]://<containername>@<accountname>.blob.core.windows.net/<path>
+-XAAUDIT.HDFS.AZURE_ACCOUNTNAME=__REPLACE_AZURE_ACCOUNT_NAME
+-XAAUDIT.HDFS.AZURE_ACCOUNTKEY=__REPLACE_AZURE_ACCOUNT_KEY
+-XAAUDIT.HDFS.AZURE_SHELL_KEY_PROVIDER=__REPLACE_AZURE_SHELL_KEY_PROVIDER
+-XAAUDIT.HDFS.AZURE_ACCOUNTKEY_PROVIDER=__REPLACE_AZURE_ACCOUNT_KEY_PROVIDER
+-
+-#Log4j Audit Provider
+-XAAUDIT.LOG4J.ENABLE=false
+-XAAUDIT.LOG4J.IS_ASYNC=false
+-XAAUDIT.LOG4J.ASYNC.MAX.QUEUE.SIZE=10240
+-XAAUDIT.LOG4J.ASYNC.MAX.FLUSH.INTERVAL.MS=30000
+-XAAUDIT.LOG4J.DESTINATION.LOG4J=true
+-XAAUDIT.LOG4J.DESTINATION.LOG4J.LOGGER=xaaudit
+-
+-# End of V3 properties
+-
+-#
+-#  Audit to HDFS Configuration
+-#
+-# If XAAUDIT.HDFS.IS_ENABLED is set to true, please replace tokens
+-# that start with __REPLACE__ with appropriate values
+-#  XAAUDIT.HDFS.IS_ENABLED=true
+-#  XAAUDIT.HDFS.DESTINATION_DIRECTORY=hdfs://__REPLACE__NAME_NODE_HOST:8020/ranger/audit/%app-type%/%time:yyyyMMdd%
+-#  XAAUDIT.HDFS.LOCAL_BUFFER_DIRECTORY=__REPLACE__LOG_DIR/ozone/audit
+-#  XAAUDIT.HDFS.LOCAL_ARCHIVE_DIRECTORY=__REPLACE__LOG_DIR/ozone/audit/archive
+-#
+-# Example:
+-#  XAAUDIT.HDFS.IS_ENABLED=true
+-#  XAAUDIT.HDFS.DESTINATION_DIRECTORY=hdfs://namenode.example.com:8020/ranger/audit/%app-type%/%time:yyyyMMdd%
+-#  XAAUDIT.HDFS.LOCAL_BUFFER_DIRECTORY=/var/log/ozone/audit
+-#  XAAUDIT.HDFS.LOCAL_ARCHIVE_DIRECTORY=/var/log/ozone/audit/archive
+-#
+-XAAUDIT.HDFS.IS_ENABLED=false
+-XAAUDIT.HDFS.DESTINATION_DIRECTORY=hdfs://__REPLACE__NAME_NODE_HOST:8020/ranger/audit/%app-type%/%time:yyyyMMdd%
+-XAAUDIT.HDFS.LOCAL_BUFFER_DIRECTORY=__REPLACE__LOG_DIR/ozone/audit
+-XAAUDIT.HDFS.LOCAL_ARCHIVE_DIRECTORY=__REPLACE__LOG_DIR/ozone/audit/archive
+-
+-XAAUDIT.HDFS.DESTINTATION_FILE=%hostname%-audit.log
+-XAAUDIT.HDFS.DESTINTATION_FLUSH_INTERVAL_SECONDS=900
+-XAAUDIT.HDFS.DESTINTATION_ROLLOVER_INTERVAL_SECONDS=86400
+-XAAUDIT.HDFS.DESTINTATION_OPEN_RETRY_INTERVAL_SECONDS=60
+-XAAUDIT.HDFS.LOCAL_BUFFER_FILE=%time:yyyyMMdd-HHmm.ss%.log
+-XAAUDIT.HDFS.LOCAL_BUFFER_FLUSH_INTERVAL_SECONDS=60
+-XAAUDIT.HDFS.LOCAL_BUFFER_ROLLOVER_INTERVAL_SECONDS=600
+-XAAUDIT.HDFS.LOCAL_ARCHIVE_MAX_FILE_COUNT=10
+-
+-#Solr Audit Provider
+-XAAUDIT.SOLR.IS_ENABLED=false
+-XAAUDIT.SOLR.MAX_QUEUE_SIZE=1
+-XAAUDIT.SOLR.MAX_FLUSH_INTERVAL_MS=1000
+-XAAUDIT.SOLR.SOLR_URL=http://localhost:6083/solr/ranger_audits
+-
+-# End of V2 properties
+-
+-#
+-# SSL Client Certificate Information
+-#
+-# Example:
+-# SSL_KEYSTORE_FILE_PATH=/etc/hadoop/conf/ranger-plugin-keystore.jks
+-# SSL_KEYSTORE_PASSWORD=none
+-# SSL_TRUSTSTORE_FILE_PATH=/etc/hadoop/conf/ranger-plugin-truststore.jks
+-# SSL_TRUSTSTORE_PASSWORD=none
+-#
+-# You do not need use SSL between agent and security admin tool, please leave these sample value as it is.
+-#
+-SSL_KEYSTORE_FILE_PATH=/etc/hadoop/conf/ranger-plugin-keystore.jks
+-SSL_KEYSTORE_PASSWORD=myKeyFilePassword
+-SSL_TRUSTSTORE_FILE_PATH=/etc/hadoop/conf/ranger-plugin-truststore.jks
+-SSL_TRUSTSTORE_PASSWORD=changeit
+-
+-
+-#
+-# Custom component user
+-# CUSTOM_COMPONENT_USER=<custom-user>
+-# keep blank if component user is default
+-CUSTOM_USER=ozone
+-
+-
+-#
+-# Custom component group
+-# CUSTOM_COMPONENT_GROUP=<custom-group>
+-# keep blank if component group is default
+-CUSTOM_GROUP=hadoop
+\ No newline at end of file
+diff --git a/plugin-ozone/src/main/java/org/apache/ranger/authorization/ozone/authorizer/RangerOzoneAuthorizer.java b/plugin-ozone/src/main/java/org/apache/ranger/authorization/ozone/authorizer/RangerOzoneAuthorizer.java
+deleted file mode 100644
+index 5246af192..000000000
+--- a/plugin-ozone/src/main/java/org/apache/ranger/authorization/ozone/authorizer/RangerOzoneAuthorizer.java
++++ /dev/null
+@@ -1,202 +0,0 @@
+-
+-/*
+- * Licensed to the Apache Software Foundation (ASF) under one
+- * or more contributor license agreements.  See the NOTICE file
+- * distributed with this work for additional information
+- * regarding copyright ownership.  The ASF licenses this file
+- * to you under the Apache License, Version 2.0 (the
+- * "License"); you may not use this file except in compliance
+- * with the License.  You may obtain a copy of the License at
+- *
+- * http://www.apache.org/licenses/LICENSE-2.0
+- *
+- * Unless required by applicable law or agreed to in writing,
+- * software distributed under the License is distributed on an
+- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+- * KIND, either express or implied.  See the License for the
+- * specific language governing permissions and limitations
+- * under the License.
+- */
+-
+-package org.apache.ranger.authorization.ozone.authorizer;
+-
+-import com.google.common.collect.Sets;
+-import org.apache.commons.logging.Log;
+-import org.apache.commons.logging.LogFactory;
+-import org.apache.hadoop.ozone.security.acl.IAccessAuthorizer;
+-import org.apache.hadoop.ozone.security.acl.IOzoneObj;
+-import org.apache.hadoop.ozone.security.acl.OzoneObj;
+-import org.apache.hadoop.ozone.security.acl.RequestContext;
+-import org.apache.hadoop.security.UserGroupInformation;
+-import org.apache.ranger.audit.provider.MiscUtil;
+-import org.apache.ranger.plugin.audit.RangerDefaultAuditHandler;
+-import org.apache.ranger.plugin.policyengine.RangerAccessRequestImpl;
+-import org.apache.ranger.plugin.policyengine.RangerAccessResourceImpl;
+-import org.apache.ranger.plugin.policyengine.RangerAccessResult;
+-import org.apache.ranger.plugin.service.RangerBasePlugin;
+-import org.apache.ranger.plugin.util.RangerPerfTracer;
+-
+-import java.util.Date;
+-
+-public class RangerOzoneAuthorizer implements IAccessAuthorizer {
+-	public static final String ACCESS_TYPE_READ = "read";
+-	public static final String ACCESS_TYPE_WRITE = "write";
+-	public static final String ACCESS_TYPE_CREATE = "create";
+-	public static final String ACCESS_TYPE_LIST = "list";
+-	public static final String ACCESS_TYPE_DELETE = "delete";
+-	public static final String ACCESS_TYPE_READ_ACL = "read_acl";
+-	public static final String ACCESS_TYPE_WRITE_ACL = "write_acl";
+-
+-
+-    public static final String KEY_RESOURCE_VOLUME = "volume";
+-	public static final String KEY_RESOURCE_BUCKET = "bucket";
+-	public static final String KEY_RESOURCE_KEY = "key";
+-
+-	private static final Log PERF_OZONEAUTH_REQUEST_LOG = RangerPerfTracer.getPerfLogger("ozoneauth.request");
+-
+-    private static final Log LOG = LogFactory.getLog(RangerOzoneAuthorizer.class);
+-
+-	private static volatile RangerBasePlugin rangerPlugin = null;
+-	RangerDefaultAuditHandler auditHandler = null;
+-
+-	public RangerOzoneAuthorizer() {
+-		rangerPlugin = new RangerBasePlugin("ozone", "ozone");
+-
+-		rangerPlugin.init(); // this will initialize policy engine and policy refresher
+-		auditHandler = new RangerDefaultAuditHandler();
+-		rangerPlugin.setResultProcessor(auditHandler);
+-	}
+-
+-	@Override
+-	public boolean checkAccess(IOzoneObj ozoneObject, RequestContext context) {
+-		boolean returnValue = false;
+-		if (ozoneObject == null) {
+-			LOG.error("Ozone object is null!!");
+-			return returnValue;
+-		}
+-		OzoneObj ozoneObj = (OzoneObj) ozoneObject;
+-		UserGroupInformation ugi = context.getClientUgi();
+-		ACLType operation = context.getAclRights();
+-		String resource = ozoneObj.getPath();
+-
+-		if (LOG.isDebugEnabled()) {
+-			LOG.debug("==> RangerOzoneAuthorizer.checkAccess with operation = " + operation + ", resource = " +
+-					resource + ", store type = " + OzoneObj.StoreType.values() + ", ugi = " + ugi + ", ip = " +
+-					context.getIp() + ", resourceType = " + ozoneObj.getResourceType() + ")");
+-		}
+-
+-		if (rangerPlugin == null) {
+-			MiscUtil.logErrorMessageByInterval(LOG,
+-					"Authorizer is still not initialized");
+-			return returnValue;
+-		}
+-
+-		//TODO: If sorce type is S3 and resource is volume, then allow it by default
+-		if (ozoneObj.getStoreType() == OzoneObj.StoreType.S3 && ozoneObj.getResourceType() == OzoneObj.ResourceType.VOLUME) {
+-			if (LOG.isDebugEnabled()) {
+-				LOG.debug("If store type is s3 and resource is volume, then we allow it by default!  Returning true");
+-			}
+-			LOG.warn("Allowing access by default since source type is S3 and resource type is Volume!!");
+-			return true;
+-		}
+-
+-		RangerPerfTracer perf = null;
+-
+-		if (RangerPerfTracer.isPerfTraceEnabled(PERF_OZONEAUTH_REQUEST_LOG)) {
+-			perf = RangerPerfTracer.getPerfTracer(PERF_OZONEAUTH_REQUEST_LOG, "RangerOzoneAuthorizer.authorize(resource=" + resource + ")");
+-		}
+-
+-		Date eventTime = new Date();
+-		String accessType = mapToRangerAccessType(operation);
+-		if (accessType == null) {
+-			MiscUtil.logErrorMessageByInterval(LOG,
+-					"Unsupported access type. operation=" + operation) ;
+-			LOG.fatal("Unsupported access type. operation=" + operation + ", resource=" + resource);
+-			return returnValue;
+-		}
+-		String action = accessType;
+-		String clusterName = rangerPlugin.getClusterName();
+-
+-		RangerAccessRequestImpl rangerRequest = new RangerAccessRequestImpl();
+-		rangerRequest.setUser(ugi.getShortUserName());
+-		rangerRequest.setUserGroups(Sets.newHashSet(ugi.getGroupNames()));
+-		rangerRequest.setClientIPAddress(context.getIp().getHostAddress());
+-		rangerRequest.setRemoteIPAddress(context.getIp().getHostAddress());
+-		rangerRequest.setAccessTime(eventTime);
+-
+-		RangerAccessResourceImpl rangerResource = new RangerAccessResourceImpl();
+-		rangerRequest.setResource(rangerResource);
+-		rangerRequest.setAccessType(accessType);
+-		rangerRequest.setAction(action);
+-		rangerRequest.setRequestData(resource);
+-		rangerRequest.setClusterName(clusterName);
+-
+-		if (ozoneObj.getResourceType() == OzoneObj.ResourceType.VOLUME) {
+-			rangerResource.setValue(KEY_RESOURCE_VOLUME, ozoneObj.getVolumeName());
+-		} else if (ozoneObj.getResourceType() == OzoneObj.ResourceType.BUCKET || ozoneObj.getResourceType() == OzoneObj.ResourceType.KEY) {
+-			if (ozoneObj.getStoreType() == OzoneObj.StoreType.S3) {
+-				rangerResource.setValue(KEY_RESOURCE_VOLUME, "s3Vol");
+-			} else {
+-				rangerResource.setValue(KEY_RESOURCE_VOLUME, ozoneObj.getVolumeName());
+-			}
+-			rangerResource.setValue(KEY_RESOURCE_BUCKET, ozoneObj.getBucketName());
+-			if (ozoneObj.getResourceType() == OzoneObj.ResourceType.KEY) {
+-				rangerResource.setValue(KEY_RESOURCE_KEY, ozoneObj.getKeyName());
+-			}
+-		} else {
+-			LOG.fatal("Unsupported resource = " + resource);
+-			MiscUtil.logErrorMessageByInterval(LOG, "Unsupported resource type " + ozoneObj.getResourceType() + " for resource = " + resource
+-					+ ", request=" + rangerRequest);
+-			return returnValue;
+-		}
+-
+-		try {
+-			RangerAccessResult result = rangerPlugin
+-					.isAccessAllowed(rangerRequest);
+-			if (result == null) {
+-				LOG.error("Ranger Plugin returned null. Returning false");
+-			} else {
+-				returnValue = result.getIsAllowed();
+-			}
+-		} catch (Throwable t) {
+-			LOG.error("Error while calling isAccessAllowed(). request="
+-					+ rangerRequest, t);
+-		}
+-		RangerPerfTracer.log(perf);
+-
+-		if (LOG.isDebugEnabled()) {
+-			LOG.debug("rangerRequest=" + rangerRequest + ", return="
+-					+ returnValue);
+-		}
+-		return returnValue;
+-	}
+-
+-	private String mapToRangerAccessType(ACLType operation) {
+-		String rangerAccessType = null;
+-		switch (operation) {
+-			case READ:
+-				rangerAccessType = ACCESS_TYPE_READ;
+-				break;
+-			case WRITE:
+-				rangerAccessType = ACCESS_TYPE_WRITE;
+-				break;
+-			case CREATE:
+-				rangerAccessType = ACCESS_TYPE_CREATE;
+-				break;
+-			case DELETE:
+-				rangerAccessType = ACCESS_TYPE_DELETE;
+-				break;
+-			case LIST:
+-				rangerAccessType = ACCESS_TYPE_LIST;
+-				break;
+-			case READ_ACL:
+-				rangerAccessType = ACCESS_TYPE_READ_ACL;
+-				break;
+-			case WRITE_ACL:
+-				rangerAccessType = ACCESS_TYPE_WRITE_ACL;
+-				break;
+-		}
+-		return rangerAccessType;
+-	}
+-}
+-
+diff --git a/plugin-ozone/src/main/java/org/apache/ranger/services/ozone/RangerServiceOzone.java b/plugin-ozone/src/main/java/org/apache/ranger/services/ozone/RangerServiceOzone.java
+deleted file mode 100644
+index bcc3b74ed..000000000
+--- a/plugin-ozone/src/main/java/org/apache/ranger/services/ozone/RangerServiceOzone.java
++++ /dev/null
+@@ -1,151 +0,0 @@
+-/*
+- * Licensed to the Apache Software Foundation (ASF) under one
+- * or more contributor license agreements.  See the NOTICE file
+- * distributed with this work for additional information
+- * regarding copyright ownership.  The ASF licenses this file
+- * to you under the Apache License, Version 2.0 (the
+- * "License"); you may not use this file except in compliance
+- * with the License.  You may obtain a copy of the License at
+- *
+- * http://www.apache.org/licenses/LICENSE-2.0
+- *
+- * Unless required by applicable law or agreed to in writing,
+- * software distributed under the License is distributed on an
+- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+- * KIND, either express or implied.  See the License for the
+- * specific language governing permissions and limitations
+- * under the License.
+- */
+-
+-package org.apache.ranger.services.ozone;
+-
+-import org.apache.commons.lang.StringUtils;
+-import org.apache.commons.logging.Log;
+-import org.apache.commons.logging.LogFactory;
+-import org.apache.ranger.plugin.client.HadoopException;
+-import org.apache.ranger.plugin.model.RangerPolicy;
+-import org.apache.ranger.plugin.model.RangerService;
+-import org.apache.ranger.plugin.model.RangerServiceDef;
+-import org.apache.ranger.plugin.model.RangerPolicy.RangerPolicyItem;
+-import org.apache.ranger.plugin.model.RangerPolicy.RangerPolicyItemAccess;
+-import org.apache.ranger.plugin.policyengine.RangerPolicyEngine;
+-import org.apache.ranger.plugin.service.RangerBaseService;
+-import org.apache.ranger.plugin.service.ResourceLookupContext;
+-import org.apache.ranger.services.ozone.client.OzoneResourceMgr;
+-
+-import java.util.ArrayList;
+-import java.util.Collections;
+-import java.util.HashMap;
+-import java.util.List;
+-import java.util.Map;
+-
+-public class RangerServiceOzone extends RangerBaseService {
+-
+-    private static final Log LOG = LogFactory.getLog(RangerServiceOzone.class);
+-    public static final String ACCESS_TYPE_READ  = "read";
+-    public static final String ACCESS_TYPE_WRITE  = "write";
+-    public static final String ACCESS_TYPE_CREATE  = "create";
+-    public static final String ACCESS_TYPE_LIST  = "list";
+-    public static final String ACCESS_TYPE_DELETE  = "delete";
+-    public static final String ACCESS_TYPE_READ_ACL = "read_acl";
+-    public static final String ACCESS_TYPE_WRITE_ACL = "write_acl";
+-    public static final String ACCESS_TYPE_ALL  = "all";
+-
+-
+-    public RangerServiceOzone() {
+-        super();
+-    }
+-
+-    @Override
+-    public void init(RangerServiceDef serviceDef, RangerService service) {
+-        super.init(serviceDef, service);
+-    }
+-
+-    @Override
+-    public Map<String,Object> validateConfig() throws Exception {
+-        Map<String, Object> ret = new HashMap<String, Object>();
+-        String serviceName = getServiceName();
+-        if(LOG.isDebugEnabled()) {
+-            LOG.debug("<== RangerServiceOzone.validateConfig Service: (" + serviceName + " )");
+-        }
+-
+-        if ( configs != null) {
+-            try  {
+-                ret = OzoneResourceMgr.connectionTest(serviceName, configs);
+-            } catch (HadoopException e) {
+-                LOG.error("<== RangerServiceOzone.validateConfig Error: " + e.getMessage(),e);
+-                throw e;
+-            }
+-        }
+-
+-        if(LOG.isDebugEnabled()) {
+-            LOG.debug("<== RangerServiceOzone.validateConfig Response : (" + ret + " )");
+-        }
+-
+-        return ret;
+-    }
+-
+-    @Override
+-    public List<String> lookupResource(ResourceLookupContext context) throws Exception {
+-        List<String> ret           = new ArrayList<String>();
+-        String  serviceName        = getServiceName();
+-        String  serviceType		   = getServiceType();
+-        Map<String,String> configs = getConfigs();
+-        if(LOG.isDebugEnabled()) {
+-            LOG.debug("==> RangerServiceOzone.lookupResource Context: (" + context + ")");
+-        }
+-        if (context != null) {
+-            try {
+-                ret  = OzoneResourceMgr.getOzoneResources(serviceName, serviceType, configs,context);
+-            } catch (Exception e) {
+-                LOG.error( "<==RangerServiceOzone.lookupResource Error : " + e);
+-                throw e;
+-            }
+-        }
+-        if(LOG.isDebugEnabled()) {
+-            LOG.debug("<== RangerServiceOzone.lookupResource Response: (" + ret + ")");
+-        }
+-        return ret;
+-    }
+-
+-    @Override
+-    public List<RangerPolicy> getDefaultRangerPolicies() throws Exception {
+-        if (LOG.isDebugEnabled()) {
+-            LOG.debug("==> RangerServiceOzone.getDefaultRangerPolicies() ");
+-        }
+-
+-        List<RangerPolicy> ret = super.getDefaultRangerPolicies();
+-
+-		for (RangerPolicy defaultPolicy : ret) {
+-			if (defaultPolicy.getName().startsWith("all")) {
+-                		RangerPolicyItem policyItemOwner = new RangerPolicyItem();
+-                		policyItemOwner.setUsers(Collections.singletonList(RangerPolicyEngine.RESOURCE_OWNER));
+-                		policyItemOwner.setAccesses(Collections.singletonList(new RangerPolicyItemAccess(ACCESS_TYPE_ALL)));
+-                		policyItemOwner.setDelegateAdmin(true);
+-                		defaultPolicy.getPolicyItems().add(policyItemOwner);
+-
+-                		if (StringUtils.isNotBlank(lookUpUser)) {
+-					RangerPolicyItem policyItemForLookupUser = new RangerPolicyItem();
+-					List<RangerPolicy.RangerPolicyItemAccess> accessListForLookupUser = new ArrayList<RangerPolicy.RangerPolicyItemAccess>();
+-					accessListForLookupUser.add(new RangerPolicyItemAccess(ACCESS_TYPE_READ));
+-					accessListForLookupUser.add(new RangerPolicyItemAccess(ACCESS_TYPE_WRITE));
+-					accessListForLookupUser.add(new RangerPolicyItemAccess(ACCESS_TYPE_CREATE));
+-					accessListForLookupUser.add(new RangerPolicyItemAccess(ACCESS_TYPE_LIST));
+-					accessListForLookupUser.add(new RangerPolicyItemAccess(ACCESS_TYPE_DELETE));
+-                    			accessListForLookupUser.add(new RangerPolicyItemAccess(ACCESS_TYPE_READ_ACL));
+-                    			accessListForLookupUser.add(new RangerPolicyItemAccess(ACCESS_TYPE_WRITE_ACL));
+-					accessListForLookupUser.add(new RangerPolicyItemAccess(ACCESS_TYPE_ALL));
+-					policyItemForLookupUser.setUsers(Collections.singletonList(lookUpUser));
+-					policyItemForLookupUser.setAccesses(accessListForLookupUser);
+-					policyItemForLookupUser.setDelegateAdmin(false);
+-					defaultPolicy.getPolicyItems().add(policyItemForLookupUser);
+-				}
+-			}
+-		}	
+-        if (LOG.isDebugEnabled()) {
+-            LOG.debug("<== RangerServiceOzone.getDefaultRangerPolicies() : " + ret);
+-        }
+-        return ret;
+-    }
+-
+-}
+diff --git a/plugin-ozone/src/main/java/org/apache/ranger/services/ozone/client/OzoneClient.java b/plugin-ozone/src/main/java/org/apache/ranger/services/ozone/client/OzoneClient.java
+deleted file mode 100644
+index 695510f47..000000000
+--- a/plugin-ozone/src/main/java/org/apache/ranger/services/ozone/client/OzoneClient.java
++++ /dev/null
+@@ -1,198 +0,0 @@
+-/*
+- * Licensed to the Apache Software Foundation (ASF) under one
+- * or more contributor license agreements.  See the NOTICE file
+- * distributed with this work for additional information
+- * regarding copyright ownership.  The ASF licenses this file
+- * to you under the Apache License, Version 2.0 (the
+- * "License"); you may not use this file except in compliance
+- * with the License.  You may obtain a copy of the License at
+- *
+- * http://www.apache.org/licenses/LICENSE-2.0
+- *
+- * Unless required by applicable law or agreed to in writing,
+- * software distributed under the License is distributed on an
+- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+- * KIND, either express or implied.  See the License for the
+- * specific language governing permissions and limitations
+- * under the License.
+- */
+-
+-package org.apache.ranger.services.ozone.client;
+-
+-import org.apache.commons.logging.Log;
+-import org.apache.commons.logging.LogFactory;
+-import org.apache.hadoop.conf.Configuration;
+-import org.apache.hadoop.hdds.conf.OzoneConfiguration;
+-import org.apache.hadoop.ozone.client.OzoneBucket;
+-import org.apache.hadoop.ozone.client.OzoneClientFactory;
+-import org.apache.hadoop.ozone.client.OzoneKey;
+-import org.apache.hadoop.ozone.client.OzoneVolume;
+-import org.apache.ranger.plugin.client.BaseClient;
+-
+-import java.io.IOException;
+-import java.util.*;
+-
+-public class OzoneClient extends BaseClient {
+-
+-    private static final Log LOG = LogFactory.getLog(OzoneClient.class);
+-
+-    private static final String ERR_MSG = "You can still save the repository and start creating "
+-            + "policies, but you would not be able to use autocomplete for "
+-            + "resource names. Check ranger_admin.log for more info.";
+-
+-    private Configuration conf;
+-    private org.apache.hadoop.ozone.client.OzoneClient ozoneClient = null;
+-
+-    public OzoneClient(String serviceName, Map<String,String> connectionProperties) throws Exception{
+-        super(serviceName,connectionProperties, "ozone-client");
+-        conf = new Configuration();
+-        Set<String> rangerInternalPropertyKeys = getConfigHolder().getRangerInternalPropertyKeys();
+-        for (Map.Entry<String, String> entry: connectionProperties.entrySet())  {
+-            String key = entry.getKey();
+-            String value = entry.getValue();
+-            if (!rangerInternalPropertyKeys.contains(key) && value != null) {
+-                conf.set(key, value);
+-            }
+-        }
+-        ozoneClient = OzoneClientFactory.getRpcClient(new OzoneConfiguration(conf));
+-    }
+-
+-    public void close() {
+-        try {
+-            ozoneClient.close();
+-        } catch (IOException e) {
+-            LOG.error("Unable to close Ozone Client connection", e);
+-        }
+-
+-    }
+-
+-    public List<String> getVolumeList(String volumePrefix) {
+-        if (LOG.isDebugEnabled()) {
+-            LOG.debug("==> OzoneClient getVolume volumePrefix : " + volumePrefix);
+-        }
+-
+-        List<String> ret = new ArrayList<String>();
+-        try {
+-            if (ozoneClient != null) {
+-                Iterator<? extends OzoneVolume> ozoneVolList = ozoneClient.getObjectStore().listVolumesByUser(conf.get("username"), volumePrefix, null);
+-                if (ozoneVolList != null) {
+-                    while (ozoneVolList.hasNext()) {
+-                        ret.add(ozoneVolList.next().getName());
+-                    }
+-                }
+-            }
+-        } catch (IOException e) {
+-            LOG.error("Unable to get Volume List");
+-            if (LOG.isDebugEnabled()) {
+-                LOG.debug("<== OzoneClient.getVolumeList() Error : " , e);
+-            }
+-        }
+-        if (LOG.isDebugEnabled()) {
+-            LOG.debug("<== OzoneClient.getVolumeList(): " + ret);
+-        }
+-        return ret;
+-    }
+-
+-    public List<String> getBucketList(String bucketPrefix, List<String> finalvolumeList) {
+-        if (LOG.isDebugEnabled()) {
+-            LOG.debug("==> OzoneClient getBucketList bucketPrefix : " + bucketPrefix);
+-        }
+-        List<String> ret = new ArrayList<String>();
+-        try {
+-            if (ozoneClient != null) {
+-                if (finalvolumeList != null && !finalvolumeList.isEmpty()) {
+-                    for (String ozoneVol : finalvolumeList) {
+-                        Iterator<? extends OzoneBucket> ozoneBucketList = ozoneClient.getObjectStore().getVolume(ozoneVol).listBuckets(bucketPrefix);
+-                        if (ozoneBucketList != null) {
+-                            while (ozoneBucketList.hasNext()) {
+-                                ret.add(ozoneBucketList.next().getName());
+-                            }
+-                        }
+-                    }
+-                }
+-            }
+-        } catch (IOException e) {
+-            LOG.error("Unable to get Volume List");
+-            if (LOG.isDebugEnabled()) {
+-                LOG.debug("<== OzoneClient.getVolumeList() Error : " , e);
+-            }
+-        }
+-        if (LOG.isDebugEnabled()) {
+-            LOG.debug("<== OzoneClient.getVolumeList(): " + ret);
+-        }
+-        return ret;
+-    }
+-
+-    public List<String> getKeyList(String keyPrefix, List<String> finalvolumeList, List<String> finalbucketList) {
+-        if (LOG.isDebugEnabled()) {
+-            LOG.debug("==> OzoneClient getKeyList keyPrefix : " + keyPrefix);
+-        }
+-        List<String> ret = new ArrayList<String>();
+-        try {
+-            if (ozoneClient != null) {
+-                if (finalvolumeList != null && !finalvolumeList.isEmpty()) {
+-                    for (String ozoneVol : finalvolumeList) {
+-                        Iterator<? extends OzoneBucket> ozoneBucketList = ozoneClient.getObjectStore().getVolume(ozoneVol).listBuckets(null);
+-                        if (ozoneBucketList != null) {
+-                            while (ozoneBucketList.hasNext()) {
+-                                String bucketName = ozoneBucketList.next().getName();
+-                                if (finalbucketList.contains(bucketName)) {
+-                                    Iterator<? extends OzoneKey> ozoneKeyList = ozoneBucketList.next().listKeys(keyPrefix);
+-                                    if (ozoneKeyList != null) {
+-                                        while (ozoneKeyList.hasNext()) {
+-                                            ret.add(ozoneKeyList.next().getName());
+-                                        }
+-                                    }
+-                                }
+-                            }
+-                        }
+-                    }
+-                }
+-            }
+-        } catch (IOException e) {
+-            LOG.error("Unable to get Volume List");
+-            if (LOG.isDebugEnabled()) {
+-                LOG.debug("<== OzoneClient.getVolumeList() Error : " , e);
+-            }
+-        }
+-        if (LOG.isDebugEnabled()) {
+-            LOG.debug("<== OzoneClient.getVolumeList(): " + ret);
+-        }
+-        return ret;
+-    }
+-
+-    public static Map<String, Object> connectionTest(String serviceName,
+-                                                     Map<String, String> connectionProperties) throws Exception {
+-        Map<String, Object> responseData = new HashMap<String, Object>();
+-        OzoneClient connectionObj = null;
+-        boolean connectivityStatus = false;
+-        List<String> testResult = null;
+-
+-        try {
+-            connectionObj = new OzoneClient(serviceName,	connectionProperties);
+-            if (connectionObj != null) {
+-                testResult = connectionObj.getVolumeList(null);
+-                if (testResult != null && testResult.size() != 0) {
+-                    connectivityStatus = true;
+-                }
+-                if (connectivityStatus) {
+-                    String successMsg = "ConnectionTest Successful";
+-                    generateResponseDataMap(connectivityStatus, successMsg, successMsg,
+-                            null, null, responseData);
+-                } else {
+-                    String failureMsg = "Unable to retrieve any volumes using given parameters.";
+-                    generateResponseDataMap(connectivityStatus, failureMsg, failureMsg + ERR_MSG,
+-                            null, null, responseData);
+-                }
+-            }
+-        } catch (Exception e) {
+-            throw e;
+-        } finally {
+-            if (connectionObj != null) {
+-                connectionObj.close();
+-            }
+-        }
+-
+-        return responseData;
+-    }
+-}
+diff --git a/plugin-ozone/src/main/java/org/apache/ranger/services/ozone/client/OzoneConnectionMgr.java b/plugin-ozone/src/main/java/org/apache/ranger/services/ozone/client/OzoneConnectionMgr.java
+deleted file mode 100644
+index 5b18ee356..000000000
+--- a/plugin-ozone/src/main/java/org/apache/ranger/services/ozone/client/OzoneConnectionMgr.java
++++ /dev/null
+@@ -1,103 +0,0 @@
+-/*
+- * Licensed to the Apache Software Foundation (ASF) under one
+- * or more contributor license agreements.  See the NOTICE file
+- * distributed with this work for additional information
+- * regarding copyright ownership.  The ASF licenses this file
+- * to you under the Apache License, Version 2.0 (the
+- * "License"); you may not use this file except in compliance
+- * with the License.  You may obtain a copy of the License at
+- *
+- * http://www.apache.org/licenses/LICENSE-2.0
+- *
+- * Unless required by applicable law or agreed to in writing,
+- * software distributed under the License is distributed on an
+- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+- * KIND, either express or implied.  See the License for the
+- * specific language governing permissions and limitations
+- * under the License.
+- */
+-
+-package org.apache.ranger.services.ozone.client;
+-
+-import org.apache.log4j.Logger;
+-import org.apache.ranger.plugin.util.TimedEventUtil;
+-
+-import java.util.Map;
+-import java.util.concurrent.Callable;
+-import java.util.concurrent.ConcurrentHashMap;
+-import java.util.concurrent.ConcurrentMap;
+-import java.util.concurrent.TimeUnit;
+-
+-public class OzoneConnectionMgr {
+-    private static final Logger LOG = Logger.getLogger(OzoneConnectionMgr.class);
+-
+-    protected ConcurrentMap<String, OzoneClient>    ozoneConnectionCache;
+-    protected ConcurrentMap<String, Boolean>        repoConnectStatusMap;
+-
+-
+-    public	OzoneConnectionMgr() {
+-        ozoneConnectionCache = new ConcurrentHashMap<String, OzoneClient>();
+-        repoConnectStatusMap = new ConcurrentHashMap<String, Boolean>();
+-    }
+-
+-
+-    public OzoneClient getOzoneConnection(final String serviceName, final String serviceType, final Map<String,String> configs) {
+-        OzoneClient ozoneClient  = null;
+-
+-        if (serviceType != null) {
+-            // get it from the cache
+-            ozoneClient = ozoneConnectionCache.get(serviceName);
+-            if (ozoneClient == null) {
+-                if (configs != null) {
+-
+-                    final Callable<OzoneClient> connectHive = new Callable<OzoneClient>() {
+-                        @Override
+-                        public OzoneClient call() throws Exception {
+-                            return new OzoneClient(serviceName, configs);
+-                        }
+-                    };
+-                    try {
+-                        ozoneClient = TimedEventUtil.timedTask(connectHive, 5, TimeUnit.SECONDS);
+-                    } catch(Exception e){
+-                        LOG.error("Error connecting ozone repository : "+
+-                                serviceName +" using config : "+ configs, e);
+-                    }
+-
+-                    OzoneClient oldClient = null;
+-                    if (ozoneClient != null) {
+-                        oldClient = ozoneConnectionCache.putIfAbsent(serviceName, ozoneClient);
+-                    } else {
+-                        oldClient = ozoneConnectionCache.get(serviceName);
+-                    }
+-
+-                    if (oldClient != null) {
+-                        // in the meantime someone else has put a valid client into the cache, let's use that instead.
+-                        if (ozoneClient != null) {
+-                            ozoneClient.close();
+-                        }
+-                        ozoneClient = oldClient;
+-                    }
+-                    repoConnectStatusMap.put(serviceName, true);
+-                } else {
+-                    LOG.error("Connection Config not defined for asset :"
+-                            + serviceName, new Throwable());
+-                }
+-            } else {
+-                try {
+-                    ozoneClient.getVolumeList(null);
+-                } catch(Exception e) {
+-                    ozoneConnectionCache.remove(serviceName);
+-                    /*
+-                     * There is a possibility that some other thread is also using this connection that we are going to close but
+-                     * presumably the connection is bad which is why we are closing it, so damage should not be much.
+-                     */
+-                    ozoneClient.close();
+-                    ozoneClient = getOzoneConnection(serviceName,serviceType,configs);
+-                }
+-            }
+-        } else {
+-            LOG.error("Asset not found with name "+serviceName, new Throwable());
+-        }
+-        return ozoneClient;
+-    }
+-}
+diff --git a/plugin-ozone/src/main/java/org/apache/ranger/services/ozone/client/OzoneResourceMgr.java b/plugin-ozone/src/main/java/org/apache/ranger/services/ozone/client/OzoneResourceMgr.java
+deleted file mode 100644
+index 0b999abc5..000000000
+--- a/plugin-ozone/src/main/java/org/apache/ranger/services/ozone/client/OzoneResourceMgr.java
++++ /dev/null
+@@ -1,180 +0,0 @@
+-/*
+- * Licensed to the Apache Software Foundation (ASF) under one
+- * or more contributor license agreements.  See the NOTICE file
+- * distributed with this work for additional information
+- * regarding copyright ownership.  The ASF licenses this file
+- * to you under the Apache License, Version 2.0 (the
+- * "License"); you may not use this file except in compliance
+- * with the License.  You may obtain a copy of the License at
+- *
+- * http://www.apache.org/licenses/LICENSE-2.0
+- *
+- * Unless required by applicable law or agreed to in writing,
+- * software distributed under the License is distributed on an
+- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+- * KIND, either express or implied.  See the License for the
+- * specific language governing permissions and limitations
+- * under the License.
+- */
+-
+-package org.apache.ranger.services.ozone.client;
+-
+-import org.apache.log4j.Logger;
+-import org.apache.ranger.plugin.client.HadoopException;
+-import org.apache.ranger.plugin.service.ResourceLookupContext;
+-import org.apache.ranger.plugin.util.TimedEventUtil;
+-
+-import java.util.List;
+-import java.util.Map;
+-import java.util.concurrent.Callable;
+-import java.util.concurrent.TimeUnit;
+-
+-public class OzoneResourceMgr {
+-
+-    private static final Logger LOG = Logger.getLogger(OzoneResourceMgr.class);
+-
+-    private static final String VOLUME     = "volume";
+-    private static final String BUCKET     = "bucket";
+-    private static final String KEY        = "key";
+-
+-
+-    public static Map<String, Object> connectionTest(String serviceName, Map<String, String> configs) throws Exception {
+-        Map<String, Object> ret = null;
+-
+-        if(LOG.isDebugEnabled()) {
+-            LOG.debug("==> OzoneResourceMgr.connectionTest ServiceName: "+ serviceName + "Configs" + configs );
+-        }
+-
+-        try {
+-            ret = OzoneClient.connectionTest(serviceName, configs);
+-        } catch (HadoopException e) {
+-            LOG.error("<== OzoneResourceMgr.connectionTest Error: " + e);
+-            throw e;
+-        }
+-
+-        if(LOG.isDebugEnabled()) {
+-            LOG.debug("<== OzoneResourceMgr.connectionTest Result : "+ ret  );
+-        }
+-
+-        return ret;
+-    }
+-
+-    public static List<String> getOzoneResources(String serviceName, String serviceType, Map<String, String> configs, ResourceLookupContext context) throws Exception  {
+-
+-        String userInput                       = context.getUserInput();
+-        String resource	                       = context.getResourceName();
+-        Map<String, List<String>> resourceMap  = context.getResources();
+-        List<String> resultList 	           = null;
+-        List<String> volumeList                = null;
+-        List<String> bucketList	               = null;
+-        List<String> keyList	               = null;
+-        String volumePrefix                    = null;
+-        String bucketPrefix	                   = null;
+-        String keyPrefix	                   = null;
+-
+-
+-        if(LOG.isDebugEnabled()) {
+-            LOG.debug("<== OzoneResourceMgr.getOzoneResources()  UserInput: \""+ userInput  + "\" resource : " + resource + " resourceMap: "  + resourceMap);
+-        }
+-
+-        if ( userInput != null && resource != null) {
+-            if ( resourceMap != null  && !resourceMap.isEmpty() ) {
+-                volumeList = resourceMap.get(VOLUME);
+-                bucketList = resourceMap.get(BUCKET);
+-                keyList = resourceMap.get(KEY);
+-            }
+-            switch (resource.trim().toLowerCase()) {
+-                case VOLUME:
+-                    volumePrefix = userInput;
+-                    break;
+-                case BUCKET:
+-                    bucketPrefix = userInput;
+-                    break;
+-                case KEY:
+-                    keyPrefix    = userInput;
+-                    break;
+-                default:
+-                    break;
+-            }
+-        }
+-
+-        if (serviceName != null && userInput != null) {
+-            try {
+-
+-                if(LOG.isDebugEnabled()) {
+-                    LOG.debug("==> OzoneResourceMgr.getOzoneResources() UserInput: "+ userInput  + " configs: " + configs + " volumeList: "  + volumeList + " bucketList: "
+-                            + bucketList + " keyList: " + keyList );
+-                }
+-
+-                final OzoneClient ozoneClient = new OzoneConnectionMgr().getOzoneConnection(serviceName, serviceType, configs);
+-
+-                Callable<List<String>> callableObj = null;
+-                final String finalVolPrefix;
+-                final String finalBucketPrefix;
+-                final String finalKeyPrefix;
+-
+-                final List<String> finalvolumeList = volumeList;
+-                final List<String> finalbucketList = bucketList;
+-
+-                if ( ozoneClient != null) {
+-                    if ( volumePrefix != null
+-                            && !volumePrefix.isEmpty()){
+-                        // get the DBList for given Input
+-                        finalVolPrefix = volumePrefix;
+-                        callableObj = new Callable<List<String>>() {
+-                            @Override
+-                            public List<String> call() {
+-                                return ozoneClient.getVolumeList(finalVolPrefix);
+-                            }
+-                        };
+-                    } else if ( bucketPrefix != null
+-                            && !bucketPrefix.isEmpty()) {
+-                        // get  ColumnList for given Input
+-                        finalBucketPrefix = bucketPrefix;
+-                        callableObj = new Callable<List<String>>() {
+-
+-                            @Override
+-                            public List<String> call() {
+-                                return ozoneClient.getBucketList(finalBucketPrefix,
+-                                        finalvolumeList);
+-                            }
+-                        };
+-                    } else if ( keyPrefix != null
+-                            && !keyPrefix.isEmpty()) {
+-                        // get  ColumnList for given Input
+-                       finalKeyPrefix = keyPrefix;
+-
+-                        callableObj = new Callable<List<String>>() {
+-                            @Override
+-                            public List<String> call() {
+-                                return ozoneClient.getKeyList(finalKeyPrefix,
+-                                        finalvolumeList,
+-                                        finalbucketList);
+-                            }
+-                        };
+-                    }
+-                    if (callableObj != null) {
+-                        synchronized (ozoneClient) {
+-                            resultList = TimedEventUtil.timedTask(callableObj, 5,
+-                                    TimeUnit.SECONDS);
+-                        }
+-                    } else {
+-                        LOG.error("Could not initiate at timedTask");
+-                    }
+-                }
+-            } catch (Exception e) {
+-                LOG.error("Unable to get ozone resources.", e);
+-                throw e;
+-            }
+-        }
+-
+-        if(LOG.isDebugEnabled()) {
+-            LOG.debug("<== OzoneResourceMgr.getOzoneResources() UserInput: "+ userInput  + " configs: " + configs + " volumeList: "  + volumeList + " bucketList: "
+-                    + bucketList + " keyList: " + keyList + "Result :" + resultList );
+-
+-        }
+-        return resultList;
+-
+-    }
+-
+-}
+diff --git a/pom.xml b/pom.xml
+index 9dcff2a51..1d93c163b 100644
+--- a/pom.xml
++++ b/pom.xml
+@@ -246,7 +246,6 @@
+                 <module>hive-agent</module>
+                 <module>knox-agent</module>
+                 <module>plugin-yarn</module>
+-                <module>plugin-ozone</module>
+                 <module>security-admin</module>
+                 <module>plugin-kafka</module>
+                 <module>plugin-solr</module>
+@@ -369,20 +368,6 @@
+                 <module>ranger-yarn-plugin-shim</module>
+             </modules>
+         </profile>
+-    <profile>
+-            <id>ranger-ozone-plugin</id>
+-            <modules>
+-                <module>agents-audit</module>
+-                <module>agents-common</module>
+-                <module>agents-cred</module>
+-                <module>agents-installer</module>
+-                <module>credentialbuilder</module>
+-                <module>ranger-plugin-classloader</module>
+-                <module>ranger-util</module>
+-                <module>plugin-ozone</module>
+-                <module>ranger-ozone-plugin-shim</module>
+-            </modules>
+-        </profile>
+         <profile>
+             <id>ranger-kafka-plugin</id>
+             <modules>
+@@ -517,7 +502,6 @@
+                 <module>hive-agent</module>
+                 <module>knox-agent</module>
+                 <module>plugin-yarn</module>
+-                <module>plugin-ozone</module>
+                 <module>security-admin</module>
+                 <module>plugin-kafka</module>
+                 <module>plugin-solr</module>
+@@ -600,7 +584,6 @@
+                 <module>hive-agent</module>
+                 <module>knox-agent</module>
+                 <module>plugin-yarn</module>
+-                <module>plugin-ozone</module>
+                 <module>security-admin</module>
+                 <module>plugin-kafka</module>
+                 <module>plugin-solr</module>

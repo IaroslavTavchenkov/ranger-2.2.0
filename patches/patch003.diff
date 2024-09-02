@@ -1,0 +1,16 @@
+diff --git a/embeddedwebserver/pom.xml b/embeddedwebserver/pom.xml
+index bdc93d6..6741f17 100644
+--- a/embeddedwebserver/pom.xml
++++ b/embeddedwebserver/pom.xml
+@@ -59,9 +59,10 @@
+             <version>P20140317-1600</version>
+         </dependency>
+         <dependency>
+-            <groupId>log4j</groupId>
++            <groupId>org.apache.logging.log4j</groupId>
+             <artifactId>log4j</artifactId>
+             <version>${log4j.version}</version>
++            <type>pom</type>
+         </dependency>	
+ 	<dependency>
+             <groupId>org.apache.ranger</groupId>

@@ -1,0 +1,19 @@
+diff --git a/agents-audit/src/main/java/org/apache/ranger/audit/utils/AbstractRangerAuditWriter.java b/agents-audit/src/main/java/org/apache/ranger/audit/utils/AbstractRangerAuditWriter.java
+index b5967e4..1f38ee5 100644
+--- a/agents-audit/src/main/java/org/apache/ranger/audit/utils/AbstractRangerAuditWriter.java
++++ b/agents-audit/src/main/java/org/apache/ranger/audit/utils/AbstractRangerAuditWriter.java
+@@ -267,7 +267,6 @@ public abstract class AbstractRangerAuditWriter implements RangerAuditWriter {
+             createFileSystemFolders();
+             ostream               = fileSystem.create(auditPath);
+             logWriter             = new PrintWriter(ostream);
+-            isHFlushCapableStream = ostream.hasCapability(StreamCapabilities.HFLUSH);
+         }
+
+         if (logger.isDebugEnabled()) {
+@@ -350,4 +349,4 @@ public abstract class AbstractRangerAuditWriter implements RangerAuditWriter {
+     public void setFileExtension(String fileExtension) {
+         this.fileExtension  = fileExtension;
+     }
+-}
+\ No newline at end of file
++}
