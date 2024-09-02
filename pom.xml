@@ -117,7 +117,7 @@
         <googlecode.log4jdbc.version>1.2</googlecode.log4jdbc.version>
         <gson.version>2.2.4</gson.version>
         <guice.version>4.0</guice.version>
-        <hadoop.version>3.3.0</hadoop.version>
+        <hadoop.version>3.4.0</hadoop.version>
         <ozone.version>1.0.0</ozone.version>
         <hamcrest.version>2.2</hamcrest.version>
         <hbase.version>2.2.6</hbase.version>
@@ -128,7 +128,7 @@
         <hbase-shaded-netty>3.3.0</hbase-shaded-netty>
         <hbase-shaded-miscellaneous>3.3.0</hbase-shaded-miscellaneous>
         <libfb303.version>0.9.3</libfb303.version>
-        <libthrift.version>0.13.0</libthrift.version>
+        <libthrift.version>0.16.0</libthrift.version>
         <htrace-core.version>4.1.0-incubating</htrace-core.version>
         <httpcomponents.httpclient.version>4.5.6</httpcomponents.httpclient.version>
         <httpcomponents.httpcore.version>4.4.6</httpcomponents.httpcore.version>
