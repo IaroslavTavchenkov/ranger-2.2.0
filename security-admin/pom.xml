@@ -545,7 +545,7 @@
         <dependency>
             <groupId>com.nimbusds</groupId>
             <artifactId>nimbus-jose-jwt</artifactId>
-            <version>8.15</version>
+            <version>10.0.2</version>
             <scope>compile</scope>
         </dependency>
         <!-- Transitive dependency for nimbus-jose-jwt.
@@ -673,12 +673,12 @@
                                     <value>${project.version}</value>
                                 </replacement>
                                 <replacement>
-                                    <token>(?m)\&lt;\!-- *dev *--\>(.*)$</token>
-                                    <value>\&lt;\!-- dev $1 --\></value>
+                                    <token>(?m)\&lt;\!-- *dev *--\&gt;(.*)$</token>
+                                    <value>\&lt;\!-- dev $1 --\&gt;</value>
                                 </replacement>
                                 <replacement>
-                                    <token>\&lt;\!-- *prod *(.*) *--\></token>
-                                    <value>\&lt;\!-- prod --\>$1</value>
+                                    <token>\&lt;\!-- *prod *(.*) *--\&gt;</token>
+                                    <value>\&lt;\!-- prod --\&gt;$1</value>
                                 </replacement>
                             </replacements>
                         </configuration>
